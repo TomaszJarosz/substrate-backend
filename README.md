@@ -1,92 +1,182 @@
-# substrate-backend
+# Substrate Node Template
 
+A fresh [Substrate](https://substrate.io/) node, ready for hacking :rocket:
 
+A standalone version of this template is available  for each release of Polkadot in the [Substrate Developer Hub  Parachain Template](https://github.com/substrate-developer-hub/substrate-parachain-template/) repository.
+The parachain template is generated directly at each Polkadot release branch form the [Node Template in Substreate](https://github.com/paritytech/substrate/tree/master/bin/node-template) upstream
 
-## Getting started
+It is usually best to to use the stand-alone version to start a new project.
+All bugs, suggestions, and feature requests should be made upstream in the [Substrate](https://github.com/paritytech/substrate/tree/master/bin/node-template) repository.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Getting Started
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Depending on your operating system and Rust version, there might be additional packages required to compile this template.
+Check the [Install](https://docs.substrate.io/install/) instructions for your platform for the most common dependencies.
+Alternatively, you can use one of the [alternative installation](#alternatives-installations) options.
 
-## Add your files
+### Build
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Use the following command to build the node without launching it:
 
+```sh
+cargo build --release
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/tomaszjarosz1994/substrate-backend.git
-git branch -M main
-git push -uf origin main
+
+### Embedded Docs
+
+After you build the project, you can use the following command to explore its parameters and subcommands:
+
+```sh
+./target/release/node-template -h
 ```
 
-## Integrate with your tools
+You can generate and view the [Rust Docs](https://doc.rust-lang.org/cargo/commands/cargo-doc.html) for this template with this command:
 
-- [ ] [Set up project integrations](https://gitlab.com/tomaszjarosz1994/substrate-backend/-/settings/integrations)
+```sh
+cargo +nightly doc --open
+```
 
-## Collaborate with your team
+### Single-Node Development Chain
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+The following command starts a single-node development chain that doesn't persist state:
 
-## Test and Deploy
+```sh
+./target/release/node-template --dev
+```
 
-Use the built-in continuous integration in GitLab.
+To purge the development chain's state, run the following command:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+```sh
+./target/release/node-template purge-chain --dev
+```
 
-***
+To start the development chain with detailed logging, run the following command:
 
-# Editing this README
+```sh
+RUST_BACKTRACE=1 ./target/release/node-template -ldebug --dev
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Development chains:
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- Maintain state in a `tmp` folder while the node is running.
+- Use the **Alice** and **Bob** accounts as default validator authorities.
+- Use the **Alice** account as the default `sudo` account.
+- Are preconfigured with a genesis state (`/node/src/chain_spec.rs`) that includes several prefunded development accounts.
 
-## Name
-Choose a self-explaining name for your project.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+To persist chain state between runs, specify a base path by running a command similar to the following:
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```sh
+// Create a folder to use as the db base path
+$ mkdir my-chain-state
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+// Use of that folder to store the chain state
+$ ./target/release/node-template --dev --base-path ./my-chain-state/
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+// Check the folder structure created inside the base path after running the chain
+$ ls ./my-chain-state
+chains
+$ ls ./my-chain-state/chains/
+dev
+$ ls ./my-chain-state/chains/dev
+db keystore network
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Connect with Polkadot-JS Apps Front-End
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+After you start the node template locally, you can interact with it using the hosted version of the [Polkadot/Substrate Portal](https://polkadot.js.org/apps/#/explorer?rpc=ws://localhost:9944) front-end by connecting to the local node endpoint.
+A hosted version is also available on [IPFS (redirect) here](https://dotapps.io/) or [IPNS (direct) here](ipns://dotapps.io/?rpc=ws%3A%2F%2F127.0.0.1%3A9944#/explorer).
+You can also find the source code and instructions for hosting your own instance on the [polkadot-js/apps](https://github.com/polkadot-js/apps) repository.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### Multi-Node Local Testnet
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+If you want to see the multi-node consensus algorithm in action, see [Simulate a network](https://docs.substrate.io/tutorials/get-started/simulate-network/).
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+## Template Structure
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+A Substrate project such as this consists of a number of components that are spread across a few directories.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### Node
 
-## License
-For open source projects, say how it is licensed.
+A blockchain node is an application that allows users to participate in a blockchain network.
+Substrate-based blockchain nodes expose a number of capabilities:
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- Networking: Substrate nodes use the [`libp2p`](https://libp2p.io/) networking stack to allow the
+  nodes in the network to communicate with one another.
+- Consensus: Blockchains must have a way to come to [consensus](https://docs.substrate.io/fundamentals/consensus/) on the state of the network.
+  Substrate makes it possible to supply custom consensus engines and also ships with several consensus mechanisms that have been built on top of [Web3 Foundation research](https://research.web3.foundation/en/latest/polkadot/NPoS/index.html).
+- RPC Server: A remote procedure call (RPC) server is used to interact with Substrate nodes.
+
+There are several files in the `node` directory.
+Take special note of the following:
+
+- [`chain_spec.rs`](./node/src/chain_spec.rs): A [chain specification](https://docs.substrate.io/build/chain-spec/) is a source code file that defines a Substrate chain's initial (genesis) state.
+  Chain specifications are useful for development and testing, and critical when architecting the launch of a production chain.
+  Take note of the `development_config` and `testnet_genesis` functions,.
+  These functions are used to define the genesis state for the local development chain configuration.
+  These functions identify some [well-known accounts](https://docs.substrate.io/reference/command-line-tools/subkey/) and use them to configure the blockchain's initial state.
+- [`service.rs`](./node/src/service.rs): This file defines the node implementation.
+  Take note of the libraries that this file imports and the names of the functions it invokes.
+  In particular, there are references to consensus-related topics, such as the [block finalization and forks](https://docs.substrate.io/fundamentals/consensus/#finalization-and-forks) and other [consensus mechanisms](https://docs.substrate.io/fundamentals/consensus/#default-consensus-models) such as Aura for block authoring and GRANDPA for finality.
+
+
+
+### Runtime
+
+In Substrate, the terms "runtime" and "state transition function" are analogous.
+Both terms refer to the core logic of the blockchain that is responsible for validating blocks and executing the state changes they define.
+The Substrate project in this repository uses [FRAME](https://docs.substrate.io/fundamentals/runtime-development/#frame) to construct a blockchain runtime.
+FRAME allows runtime developers to declare domain-specific logic in modules called "pallets".
+At the heart of FRAME is a helpful [macro language](https://docs.substrate.io/reference/frame-macros/) that makes it easy to create pallets and flexibly compose them to create blockchains that can address [a variety of needs](https://substrate.io/ecosystem/projects/).
+
+Review the [FRAME runtime implementation](./runtime/src/lib.rs) included in this template and note the following:
+
+- This file configures several pallets to include in the runtime.
+  Each pallet configuration is defined by a code block that begins with `impl $PALLET_NAME::Config for Runtime`.
+- The pallets are composed into a single runtime by way of the [`construct_runtime!`](https://crates.parity.io/frame_support/macro.construct_runtime.html) macro, which is part of the core FRAME Support [system](https://docs.substrate.io/reference/frame-pallets/#system-pallets) library.
+
+### Pallets
+
+The runtime in this project is constructed using many FRAME pallets that ship with the [core Substrate repository](https://github.com/paritytech/substrate/tree/master/frame) and a template pallet that is [defined in the `pallets`](./pallets/template/src/lib.rs) directory.
+
+A FRAME pallet is compromised of a number of blockchain primitives:
+
+- Storage: FRAME defines a rich set of powerful [storage abstractions](https://docs.substrate.io/build/runtime-storage/) that makes it easy to use Substrate's efficient key-value database to manage the evolving state of a blockchain.
+- Dispatchables: FRAME pallets define special types of functions that can be invoked (dispatched) from outside of the runtime in order to update its state.
+- Events: Substrate uses [events and errors](https://docs.substrate.io/build/events-and-errors/) to notify users of important changes in the runtime.
+- Errors: When a dispatchable fails, it returns an error.
+- Config: The `Config` configuration interface is used to define the types and parameters upon which a FRAME pallet depends.
+
+## Alternatives Installations
+
+Instead of installing dependencies and building this source directly, consider the following alternatives.
+
+### Nix
+
+Install [nix](https://nixos.org/), and optionally [direnv](https://github.com/direnv/direnv) and [lorri](https://github.com/nix-community/lorri) for a fully plug-and-play experience for setting up the development environment.
+To get all the correct dependencies, activate direnv `direnv allow` and lorri `lorri shell`.
+
+### Docker
+
+First, install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/).
+
+Then run the following command to start a single node development chain.
+
+```sh
+./scripts/docker_run.sh
+```
+
+This command compiles the code and starts a local development network.
+You can also replace the default command (`cargo build --release && ./target/release/node-template --dev --ws-external`) by appending your own.
+For example:
+
+```sh
+# Run Substrate node without re-compiling
+./scripts/docker_run.sh ./target/release/node-template --dev --ws-external
+
+# Purge the local dev chain
+./scripts/docker_run.sh ./target/release/node-template purge-chain --dev
+
+# Check whether the code is compilable
+./scripts/docker_run.sh cargo check
+```
