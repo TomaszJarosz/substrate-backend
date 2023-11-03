@@ -1,8 +1,11 @@
 [workspace]
 members = [
     "nodes/node-template",
+    "nodes/tomasz-node",
     "pallets/template",
+    "pallets/hello-substrate",
     "runtimes/runtime-template",
+    "runtimes/tomasz-runtime",
 ]
 [profile.release]
 panic = "unwind"
