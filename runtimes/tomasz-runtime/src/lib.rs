@@ -276,8 +276,6 @@ impl pallet_template::Config for Runtime {
 }
 
 impl hello_substrate::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = hello_substrate::weights::SubstrateWeight<Runtime>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
