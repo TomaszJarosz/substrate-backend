@@ -280,7 +280,6 @@ impl hello_substrate::Config for Runtime {
 
 impl single_value_storage::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = single_value_storage::weights::SubstrateWeight<Runtime>;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
