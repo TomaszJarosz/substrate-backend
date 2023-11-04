@@ -278,6 +278,11 @@ impl pallet_template::Config for Runtime {
 impl hello_substrate::Config for Runtime {
 }
 
+impl single_value_storage::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = single_value_storage::weights::SubstrateWeight<Runtime>;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub struct Runtime {
@@ -288,6 +293,7 @@ construct_runtime!(
 		Balances: pallet_balances,
 		Nicks: pallet_nicks,
 		HelloSubstrate: hello_substrate,
+		SingleValueStorage: single_value_storage,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.

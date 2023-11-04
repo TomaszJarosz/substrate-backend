@@ -4,6 +4,7 @@ members = [
     "nodes/tomasz-node",
     "pallets/template",
     "pallets/hello-substrate",
+    "pallets/single-value-storage",
     "runtimes/runtime-template",
     "runtimes/tomasz-runtime",
 ]
