@@ -18,9 +18,11 @@ pub use weights::*;
 
 #[frame_support::pallet]
 pub mod pallet {
+	use frame_support::log::info;
 	use super::*;
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
+	use frame_support::sp_runtime::print;
 
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
@@ -76,7 +78,8 @@ pub mod pallet {
 
 			<Something<T>>::put(something);
 
-			log::info!("called by {:?}", who);
+			print("Hello World");
+			info!("called by {:?}", who);
 
 			Self::deposit_event(Event::SomethingStored { something, who });
 			Ok(())
