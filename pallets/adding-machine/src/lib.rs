@@ -20,6 +20,7 @@ pub mod pallet {
     #[pallet::error]
     pub enum Error<T> {
         StorageOverflow,
+        ForbiddenFive,
     }
 
     #[pallet::event]
@@ -45,6 +46,25 @@ pub mod pallet {
         #[pallet::weight(1_000)]
         pub fn add(origin: OriginFor<T>, value: u32) -> DispatchResult {
             let who = ensure_signed(origin)?;
+            match <AddingMachineStorage<T>>::get() {
+                None => {
+                    <AddingMachineStorage<T>>::put(value);
+                    Self::deposit_event(Event::ValueStored { value, who });
+                }
+                Some(old) => {
+                    let new = old.checked_add(value).ok_or(Error::<T>::StorageOverflow)?;
+                    <AddingMachineStorage<T>>::put(new);
+                    Self::deposit_event(Event::ValueStored { value: new, who });
+                }
+            };
+            Ok(())
+        }
+
+        #[pallet::weight(1_000)]
+        pub fn add_but_five_is_forbidden(origin: OriginFor<T>, value: u32) -> DispatchResult {
+            let who = ensure_signed(origin)?;
+            ensure!(value != 5,  <Error<T>>::ForbiddenFive);
+
             match <AddingMachineStorage<T>>::get() {
                 None => {
                     <AddingMachineStorage<T>>::put(value);
