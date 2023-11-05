@@ -278,10 +278,6 @@ impl pallet_template::Config for Runtime {
 impl hello_substrate::Config for Runtime {
 }
 
-impl single_value_storage::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-}
-
 impl adding_machine::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
@@ -297,7 +293,6 @@ construct_runtime!(
 		Nicks: pallet_nicks,
 		//My own pallets
 		HelloSubstrate: hello_substrate,
-		SingleValueStorage: single_value_storage,
 		AddingMachine: adding_machine,
 		//
 		TransactionPayment: pallet_transaction_payment,

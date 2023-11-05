@@ -7395,20 +7395,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "single-value-storage"
-version = "4.0.0-dev"
-dependencies = [
- "frame-benchmarking",
- "frame-support",
- "frame-system",
- "parity-scale-codec",
- "scale-info",
- "sp-core",
- "sp-io",
- "sp-runtime",
-]
-
-[[package]]
 name = "siphasher"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8777,7 +8763,6 @@ dependencies = [
  "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
  "scale-info",
- "single-value-storage",
  "sp-api",
  "sp-block-builder",
  "sp-consensus-aura",
