@@ -43,6 +43,7 @@ pallet-node-authorization = { default-features = false, version = "4.0.0-dev", g
 pallet-nicks = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v1.0.0" }
 hello-substrate = { path = "../../pallets/hello-substrate", default-features = false }
 single-value-storage = { path = "../../pallets/single-value-storage", default-features = false }
+adding-machine = { path = "../../pallets/adding-machine", default-features = false }
 
 # Used for the node template's RPCs
 frame-system-rpc-runtime-api = { version = "4.0.0-dev", default-features = false, git = "https://github.com/paritytech/substrate.git", branch = "polkadot-v1.0.0" }
@@ -96,6 +97,7 @@ std = [
 	"pallet-node-authorization/std",
 	"hello-substrate/std",
 	"single-value-storage/std",
+	"adding-machine/std",
 ]
 runtime-benchmarks = [
 	"frame-benchmarking/runtime-benchmarks",

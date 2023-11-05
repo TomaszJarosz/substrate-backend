@@ -5,6 +5,7 @@ members = [
     "pallets/template",
     "pallets/hello-substrate",
     "pallets/single-value-storage",
+    "pallets/adding-machine",
     "runtimes/runtime-template",
     "runtimes/tomasz-runtime",
 ]

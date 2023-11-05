@@ -282,6 +282,10 @@ impl single_value_storage::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 }
 
+impl adding_machine::Config for Runtime {
+	type RuntimeEvent = RuntimeEvent;
+}
+
 // Create the runtime by composing the FRAME pallets that were previously configured.
 construct_runtime!(
 	pub struct Runtime {
@@ -291,8 +295,11 @@ construct_runtime!(
 		Grandpa: pallet_grandpa,
 		Balances: pallet_balances,
 		Nicks: pallet_nicks,
+		//My own pallets
 		HelloSubstrate: hello_substrate,
 		SingleValueStorage: single_value_storage,
+		AddingMachine: adding_machine,
+		//
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.

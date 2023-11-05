@@ -13,6 +13,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "adding-machine"
+version = "4.0.0-dev"
+dependencies = [
+ "frame-benchmarking",
+ "frame-support",
+ "frame-system",
+ "log",
+ "parity-scale-codec",
+ "scale-info",
+ "sp-core",
+ "sp-io",
+ "sp-runtime",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8741,6 +8756,7 @@ dependencies = [
 name = "tomasz-runtime"
 version = "4.0.0-dev"
 dependencies = [
+ "adding-machine",
  "frame-benchmarking",
  "frame-executive",
  "frame-support",
