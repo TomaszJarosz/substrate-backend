@@ -2,10 +2,6 @@
 
 pub use pallet::*;
 
-pub mod weights;
-
-pub use weights::*;
-
 #[frame_support::pallet(dev_mode)]
 pub mod pallet {
     use super::*;
