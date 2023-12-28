@@ -22,7 +22,6 @@ use sp_std::prelude::*;
 #[cfg(feature = "std")]
 use sp_version::NativeVersion;
 use sp_version::RuntimeVersion;
-use frame_system::EnsureRoot;
 
 // A few exports that help ease life for downstream crates.
 pub use frame_support::{
@@ -283,12 +282,10 @@ construct_runtime!(
 		Aura: pallet_aura,
 		Grandpa: pallet_grandpa,
 		Balances: pallet_balances,
-		Nicks: pallet_nicks,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
 		// Include the custom logic from the pallet-template in the runtime.
 		TemplateModule: pallet_template,
-		NodeAuthorization: pallet_node_authorization::{Pallet, Call, Storage, Event<T>, Config<T>},
 	}
 );
 
@@ -570,39 +567,4 @@ impl_runtime_apis! {
 			Executive::try_execute_block(block, state_root_check, signature_check, select).expect("execute-block failed")
 		}
 	}
-}
-
-parameter_types! {
- pub const MaxWellKnownNodes: u32 = 8;
- pub const MaxPeerIdLength: u32 = 128;
-}
-
-impl pallet_node_authorization::Config for Runtime {
-	type RuntimeEvent = RuntimeEvent;
-	type MaxWellKnownNodes = MaxWellKnownNodes;
-	type MaxPeerIdLength = MaxPeerIdLength;
-	type AddOrigin = EnsureRoot<AccountId>;
-	type RemoveOrigin = EnsureRoot<AccountId>;
-	type SwapOrigin = EnsureRoot<AccountId>;
-	type ResetOrigin = EnsureRoot<AccountId>;
-	type WeightInfo = ();
-}
-
-impl pallet_nicks::Config for Runtime {
-	// The Balances pallet implements the ReservableCurrency trait.
-	// `Balances` is defined in `construct_runtime!` macro.
-	type Currency = Balances;
-	// Set ReservationFee to a value.
-	type ReservationFee = ConstU128<100>;
-	// No action is taken when deposits are forfeited.
-	type Slashed = ();
-	// Configure the FRAME System Root origin as the Nick pallet admin.
-	// https://paritytech.github.io/substrate/master/frame_system/enum.RawOrigin.html#variant.Root
-	type ForceOrigin = frame_system::EnsureRoot<AccountId>;
-	// Set MinLength of nick name to a desired value.
-	type MinLength = ConstU32<8>;
-	// Set MaxLength of nick name to a desired value.
-	type MaxLength = ConstU32<32>;
-	// The ubiquitous event type.
-	type RuntimeEvent = RuntimeEvent;
 }

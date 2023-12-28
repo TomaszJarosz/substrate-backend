@@ -2,7 +2,7 @@
 members = [
     "nodes/node-template",
     "nodes/tomasz-node",
-    "pallets/template",
+    "pallets/pallete-template",
     "pallets/hello-substrate",
     "pallets/adding-machine",
     "runtimes/runtime-template",
